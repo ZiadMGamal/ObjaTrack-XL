@@ -1,0 +1,50 @@
+base:
+  name: yolov8n.pt
+  task: detect
+  input_size: [640, 640]
+  batch_size: 1
+
+inference:
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  max_detections: 300
+  agnostic_nms: false
+  classes: null
+  half_precision: false
+
+classes:
+  target_classes:
+    - person
+    - car
+    - truck
+    - bus
+    - motorcycle
+    - bicycle
+  class_names:
+    0: person
+    1: bicycle
+    2: car
+    3: motorcycle
+    5: bus
+    7: truck
+
+variants:
+  nano:
+    name: yolov8n.pt
+    input_size: [640, 640]
+  small:
+    name: yolov8s.pt
+    input_size: [640, 640]
+  medium:
+    name: yolov8m.pt
+    input_size: [640, 640]
+  large:
+    name: yolov8l.pt
+    input_size: [640, 640]
+  xlarge:
+    name: yolov8x.pt
+    input_size: [640, 640]
+
+warmup:
+  enabled: true
+  iterations: 10

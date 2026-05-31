@@ -1,0 +1,41 @@
+export:
+  format: onnx
+  opset_version: 17
+  dynamic_axes: true
+  simplify: true
+  output_dir: models/optimized
+
+onnx:
+  optimization_level: all
+  graph_optimization: true
+  execution_providers:
+    - CUDAExecutionProvider
+    - CPUExecutionProvider
+  intra_op_threads: 4
+  inter_op_threads: 2
+  memory_limit: 2147483648
+
+quantization:
+  enabled: true
+  method: dynamic
+  precision: int8
+  calibration_samples: 100
+  per_channel: true
+
+fp16:
+  enabled: false
+  fallback_to_fp32: true
+
+tensorrt:
+  enabled: false
+  workspace_size: 4294967296
+  fp16_mode: true
+  int8_mode: false
+  max_batch_size: 1
+  calibrator: entropy
+
+validation:
+  enabled: true
+  tolerance: 0.01
+  sample_count: 50
+  compare_outputs: true

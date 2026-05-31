@@ -1,0 +1,37 @@
+version: 1
+
+logger:
+  level: INFO
+  format: json
+  timestamp_format: "%Y-%m-%dT%H:%M:%S.%f"
+
+console:
+  enabled: true
+  level: INFO
+  colorize: true
+  show_timestamp: true
+  show_level: true
+  show_module: true
+
+file:
+  enabled: true
+  level: DEBUG
+  path: logs/objatrack.log
+  rotation: 10MB
+  retention: 7
+  compression: gz
+
+performance:
+  enabled: true
+  level: INFO
+  path: logs/performance.log
+  rotation: 5MB
+  retention: 3
+
+processors:
+  - structlog.stdlib.add_log_level
+  - structlog.stdlib.add_logger_name
+  - structlog.processors.TimeStamper
+  - structlog.processors.StackInfoRenderer
+  - structlog.processors.format_exc_info
+  - structlog.processors.UnicodeDecoder

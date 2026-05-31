@@ -1,0 +1,45 @@
+run:
+  warmup_iterations: 50
+  benchmark_iterations: 500
+  batch_sizes: [1, 2, 4, 8]
+  input_sizes: [[640, 640], [416, 416], [320, 320]]
+  num_runs: 3
+
+models:
+  pytorch:
+    enabled: true
+    path: models/yolov8n.pt
+    device: auto
+  onnx:
+    enabled: true
+    path: models/optimized/yolov8n.onnx
+    providers:
+      - CUDAExecutionProvider
+      - CPUExecutionProvider
+  onnx_quantized:
+    enabled: true
+    path: models/optimized/yolov8n_int8.onnx
+    providers:
+      - CPUExecutionProvider
+  tensorrt:
+    enabled: false
+    path: models/optimized/yolov8n.engine
+
+metrics:
+  measure_latency: true
+  measure_fps: true
+  measure_memory: true
+  measure_preprocessing: true
+  measure_postprocessing: true
+  measure_cpu_usage: true
+  measure_gpu_usage: true
+  percentiles: [50, 90, 95, 99]
+
+output:
+  save_report: true
+  report_path: outputs/reports/benchmark_report.html
+  save_json: true
+  json_path: outputs/reports/benchmark_results.json
+  save_plots: true
+  plots_dir: outputs/reports/plots
+  console_table: true

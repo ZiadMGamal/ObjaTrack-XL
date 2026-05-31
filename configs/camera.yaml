@@ -1,0 +1,31 @@
+webcam:
+  index: 0
+  width: 1280
+  height: 720
+  fps: 30
+  backend: auto
+  auto_exposure: true
+  buffer_size: 2
+
+file:
+  path: data/samples/sample.mp4
+  loop: true
+  start_frame: 0
+  end_frame: null
+  frame_skip: 0
+
+rtsp:
+  url: rtsp://localhost:8554/stream
+  transport: tcp
+  timeout: 10
+  reconnect_attempts: 5
+  reconnect_delay: 2.0
+  buffer_size: 1
+  use_threading: true
+
+preprocessing:
+  resize: [640, 640]
+  normalize: true
+  color_space: BGR
+  letterbox: true
+  auto_orient: true

@@ -1,0 +1,39 @@
+default: botsort
+
+botsort:
+  track_high_thresh: 0.5
+  track_low_thresh: 0.1
+  new_track_thresh: 0.6
+  track_buffer: 30
+  match_thresh: 0.8
+  proximity_thresh: 0.5
+  appearance_thresh: 0.25
+  with_reid: false
+  fuse_score: true
+
+bytetrack:
+  track_thresh: 0.5
+  track_buffer: 30
+  match_thresh: 0.8
+  frame_rate: 30
+  mot20: false
+
+sort:
+  max_age: 30
+  min_hits: 3
+  iou_threshold: 0.3
+
+deepsort:
+  max_age: 70
+  n_init: 3
+  max_iou_distance: 0.7
+  max_cosine_distance: 0.2
+  nn_budget: 100
+  embedding_model: osnet_x0_25
+
+display:
+  show_id: true
+  show_class: true
+  show_confidence: true
+  id_font_scale: 0.7
+  trail_length: 30

@@ -1,0 +1,88 @@
+project:
+  name: ObjaTrack-XL
+  version: 1.0.0
+  author: Ziad Mohamed Gamal
+
+environment: development
+
+device: auto
+
+model:
+  name: yolov8n.pt
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  max_detections: 300
+  classes: null
+  input_size: [640, 640]
+
+source:
+  type: file
+  path: data/samples/sample.mp4
+  webcam_index: 0
+  rtsp_url: rtsp://localhost:8554/stream
+  buffer_size: 128
+  reconnect_attempts: 5
+  reconnect_delay: 2.0
+
+tracker:
+  type: botsort
+  max_age: 30
+  min_hits: 3
+  iou_threshold: 0.3
+  max_cosine_distance: 0.2
+  nn_budget: 100
+  track_buffer: 30
+
+visualization:
+  enabled: true
+  show_boxes: true
+  show_labels: true
+  show_confidence: true
+  show_tracks: true
+  show_trajectory: true
+  trajectory_length: 30
+  show_hud: true
+  show_fps: true
+  box_thickness: 2
+  font_scale: 0.6
+  font_thickness: 1
+
+analytics:
+  counting:
+    enabled: false
+    line_start: [0, 360]
+    line_end: [1280, 360]
+  zones:
+    enabled: false
+    regions: []
+  speed_estimation:
+    enabled: false
+    pixels_per_meter: 8.0
+  dwell_time:
+    enabled: false
+    threshold_seconds: 10.0
+
+output:
+  save_video: false
+  video_path: outputs/videos/output.mp4
+  video_fps: 30
+  video_codec: mp4v
+  save_json: false
+  json_path: outputs/exports/results.json
+  save_csv: false
+  csv_path: outputs/exports/results.csv
+
+logging:
+  level: INFO
+  format: json
+  file: logs/objatrack.log
+  rotation: 10MB
+  retention: 7
+
+api:
+  enabled: false
+  host: 0.0.0.0
+  port: 8000
+  workers: 1
+  cors_origins:
+    - "*"
