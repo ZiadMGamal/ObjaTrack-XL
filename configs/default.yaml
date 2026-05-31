@@ -1,37 +1,36 @@
-project:
-  name: ObjaTrack-XL
-  version: 1.0.0
-  author: Ziad Mohamed Gamal
-
-environment: development
-
-device: auto
-
-model:
-  name: yolov8n.pt
-  confidence_threshold: 0.25
-  iou_threshold: 0.45
-  max_detections: 300
-  classes: null
-  input_size: [640, 640]
+project_name: "ObjaTrack-XL"
+device: "auto"
 
 source:
-  type: file
-  path: data/samples/sample.mp4
+  type: "file"
+  path: "data/videos/sample.mp4"
   webcam_index: 0
-  rtsp_url: rtsp://localhost:8554/stream
-  buffer_size: 128
-  reconnect_attempts: 5
+  rtsp_url: ""
+  buffer_size: 10
+  reconnect_attempts: 3
   reconnect_delay: 2.0
 
+model:
+  name: "yolov8n.pt"
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  classes: null
+  input_size: [640, 640]
+  half_precision: false
+  warmup_iterations: 5
+
 tracker:
-  type: botsort
+  type: "bytetrack"
   max_age: 30
   min_hits: 3
   iou_threshold: 0.3
+  track_high_thresh: 0.5
+  track_low_thresh: 0.1
+  new_track_thresh: 0.6
+  match_thresh: 0.8
+  with_reid: false
   max_cosine_distance: 0.2
   nn_budget: 100
-  track_buffer: 30
 
 visualization:
   enabled: true
@@ -41,8 +40,6 @@ visualization:
   show_tracks: true
   show_trajectory: true
   trajectory_length: 30
-  show_hud: true
-  show_fps: true
   box_thickness: 2
   font_scale: 0.6
   font_thickness: 1
@@ -64,25 +61,15 @@ analytics:
 
 output:
   save_video: false
-  video_path: outputs/videos/output.mp4
-  video_fps: 30
-  video_codec: mp4v
+  video_path: "outputs/output.mp4"
+  video_fps: 30.0
+  video_codec: "mp4v"
   save_json: false
-  json_path: outputs/exports/results.json
+  json_path: "outputs/exports/results.json"
   save_csv: false
-  csv_path: outputs/exports/results.csv
+  csv_path: "outputs/exports/results.csv"
 
 logging:
-  level: INFO
-  format: json
-  file: logs/objatrack.log
-  rotation: 10MB
-  retention: 7
-
-api:
-  enabled: false
-  host: 0.0.0.0
-  port: 8000
-  workers: 1
-  cors_origins:
-    - "*"
+  level: "INFO"
+  format: "console"
+  file: "logs/objatrack.log"
