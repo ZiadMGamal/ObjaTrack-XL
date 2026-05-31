@@ -1,2 +1,3 @@
-from src.api.server import create_app
-from src.api.routes import register_routes
+from src.api.app import app
+
+__all__ = ["app"]
