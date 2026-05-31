@@ -1,45 +1,39 @@
-run:
+project_name: "ObjaTrack-XL Benchmark"
+device: "auto"
+
+source:
+  type: "file"
+  path: "data/videos/benchmark.mp4"
+
+model:
+  name: "yolov8n.pt"
+  confidence_threshold: 0.25
+  iou_threshold: 0.45
+  input_size: [640, 640]
+  half_precision: false
   warmup_iterations: 50
-  benchmark_iterations: 500
-  batch_sizes: [1, 2, 4, 8]
-  input_sizes: [[640, 640], [416, 416], [320, 320]]
-  num_runs: 3
 
-models:
-  pytorch:
-    enabled: true
-    path: models/yolov8n.pt
-    device: auto
-  onnx:
-    enabled: true
-    path: models/optimized/yolov8n.onnx
-    providers:
-      - CUDAExecutionProvider
-      - CPUExecutionProvider
-  onnx_quantized:
-    enabled: true
-    path: models/optimized/yolov8n_int8.onnx
-    providers:
-      - CPUExecutionProvider
-  tensorrt:
-    enabled: false
-    path: models/optimized/yolov8n.engine
+tracker:
+  type: "bytetrack"
+  max_age: 30
+  min_hits: 3
+  iou_threshold: 0.3
+  track_high_thresh: 0.5
+  track_low_thresh: 0.1
+  new_track_thresh: 0.6
+  match_thresh: 0.8
 
-metrics:
-  measure_latency: true
-  measure_fps: true
-  measure_memory: true
-  measure_preprocessing: true
-  measure_postprocessing: true
-  measure_cpu_usage: true
-  measure_gpu_usage: true
-  percentiles: [50, 90, 95, 99]
+visualization:
+  enabled: false
 
 output:
-  save_report: true
-  report_path: outputs/reports/benchmark_report.html
+  save_video: false
   save_json: true
-  json_path: outputs/reports/benchmark_results.json
-  save_plots: true
-  plots_dir: outputs/reports/plots
-  console_table: true
+  json_path: "outputs/benchmark/results.json"
+  save_csv: true
+  csv_path: "outputs/benchmark/results.csv"
+
+logging:
+  level: "WARNING"
+  format: "json"
+  file: "logs/benchmark.log"
