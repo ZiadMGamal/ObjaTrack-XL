@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  objatrack-cpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: objatrack-xl-cpu
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    environment:
+      - OBJATRACK_DEVICE=cpu
+      - OBJATRACK_LOG_LEVEL=INFO
+    restart: unless-stopped
+    command: ["run", "--config", "configs/default.yaml"]
+
+  objatrack-gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+    container_name: objatrack-xl-gpu
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    ports:
+      - "8001:8000"
+    environment:
+      - OBJATRACK_DEVICE=cuda
+      - OBJATRACK_LOG_LEVEL=INFO
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    command: ["run", "--config", "configs/default.yaml"]
+
+  objatrack-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: objatrack-xl-api
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./configs:/app/configs
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    environment:
+      - OBJATRACK_DEVICE=cpu
+    command: ["python", "-m", "uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    restart: unless-stopped
