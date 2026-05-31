@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import time
-import pytest
 
 from src.metrics.fps_counter import FPSCounter
 from src.metrics.latency_tracker import LatencyTracker
@@ -9,7 +8,6 @@ from src.metrics.metrics_aggregator import MetricsAggregator
 
 
 class TestFPSCounter:
-
     def test_initialization(self) -> None:
         counter = FPSCounter()
         assert counter.total_frames == 0
@@ -41,7 +39,6 @@ class TestFPSCounter:
 
 
 class TestLatencyTracker:
-
     def test_create_stage(self) -> None:
         tracker = LatencyTracker()
         tracker.create_stage("detection")
@@ -80,7 +77,6 @@ class TestLatencyTracker:
 
 
 class TestMetricsAggregator:
-
     def test_initialization(self) -> None:
         agg = MetricsAggregator()
         assert agg.fps_counter is not None

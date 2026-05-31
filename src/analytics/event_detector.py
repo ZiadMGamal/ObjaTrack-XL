@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import time
-from typing import Any
 from collections import defaultdict
 from enum import Enum
+from typing import Any
 
 from src.tracking.track import Track
 from src.utils.logger import get_logger
@@ -23,7 +23,6 @@ class EventType(Enum):
 
 
 class EventDetector:
-
     def __init__(
         self,
         loiter_threshold: float = 30.0,
@@ -73,12 +72,14 @@ class EventDetector:
 
         departed = set(self._track_entry_times.keys()) - active_ids
         for tid in departed:
-            events.append({
-                "type": EventType.EXIT.value,
-                "track_id": tid,
-                "timestamp": current_time,
-                "duration": current_time - self._track_entry_times.get(tid, current_time),
-            })
+            events.append(
+                {
+                    "type": EventType.EXIT.value,
+                    "track_id": tid,
+                    "timestamp": current_time,
+                    "duration": current_time - self._track_entry_times.get(tid, current_time),
+                }
+            )
             self._cleanup_track(tid)
 
         loiter_events = self._detect_loitering(tracks, current_time)
@@ -96,7 +97,7 @@ class EventDetector:
 
         self._event_history.extend(events)
         if len(self._event_history) > self._max_history:
-            self._event_history = self._event_history[-self._max_history:]
+            self._event_history = self._event_history[-self._max_history :]
 
         return events
 
@@ -151,12 +152,14 @@ class EventDetector:
                     nearby += 1
 
             if nearby >= self._crowd_threshold - 1:
-                events.append({
-                    "type": EventType.CROWD_FORMATION.value,
-                    "center": c1,
-                    "count": nearby + 1,
-                    "timestamp": time.time(),
-                })
+                events.append(
+                    {
+                        "type": EventType.CROWD_FORMATION.value,
+                        "center": c1,
+                        "count": nearby + 1,
+                        "timestamp": time.time(),
+                    }
+                )
                 break
 
         return events
@@ -173,9 +176,7 @@ class EventDetector:
                 elif current_time - self._stationary_start[track.track_id] >= self._stationary_duration:
                     self._alerted_stationary.add(track.track_id)
                     event = self._create_event(EventType.OBJECT_LEFT, track)
-                    event["stationary_duration"] = round(
-                        current_time - self._stationary_start[track.track_id], 1
-                    )
+                    event["stationary_duration"] = round(current_time - self._stationary_start[track.track_id], 1)
                     events.append(event)
             else:
                 self._stationary_start.pop(track.track_id, None)

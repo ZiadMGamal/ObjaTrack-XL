@@ -10,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class DetectionHeatmap:
-
     def __init__(
         self,
         width: int = 1280,
@@ -51,19 +50,19 @@ class DetectionHeatmap:
                 sigma_y = max(h // 4, 5)
 
                 y_grid, x_grid = np.ogrid[
-                    max(0, cy - 3 * sigma_y): min(self._height, cy + 3 * sigma_y),
-                    max(0, cx - 3 * sigma_x): min(self._width, cx + 3 * sigma_x)
+                    max(0, cy - 3 * sigma_y) : min(self._height, cy + 3 * sigma_y),
+                    max(0, cx - 3 * sigma_x) : min(self._width, cx + 3 * sigma_x),
                 ]
-                gaussian = np.exp(
-                    -((x_grid - cx) ** 2 / (2 * sigma_x ** 2) +
-                      (y_grid - cy) ** 2 / (2 * sigma_y ** 2))
-                ) * self._intensity
+                gaussian = (
+                    np.exp(-((x_grid - cx) ** 2 / (2 * sigma_x**2) + (y_grid - cy) ** 2 / (2 * sigma_y**2)))
+                    * self._intensity
+                )
 
                 y_start = max(0, cy - 3 * sigma_y)
                 x_start = max(0, cx - 3 * sigma_x)
                 self._accumulator[
-                    y_start: y_start + gaussian.shape[0],
-                    x_start: x_start + gaussian.shape[1],
+                    y_start : y_start + gaussian.shape[0],
+                    x_start : x_start + gaussian.shape[1],
                 ] += gaussian.astype(np.float32)
 
     def render(self, frame: np.ndarray) -> np.ndarray:

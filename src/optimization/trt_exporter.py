@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from src.core.base import ComponentState
 from src.core.exceptions import OptimizationError
 from src.utils.logger import get_logger
 
@@ -8,7 +7,6 @@ logger = get_logger(__name__)
 
 
 class TensorRTExporter:
-
     def __init__(
         self,
         model_path: str,
@@ -29,6 +27,7 @@ class TensorRTExporter:
         logger.info("tensorrt_export_placeholder", model=self._model_path)
         try:
             from ultralytics import YOLO
+
             model = YOLO(self._model_path)
             result = model.export(
                 format="engine",

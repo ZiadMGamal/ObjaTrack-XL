@@ -11,7 +11,6 @@ logger = get_logger(__name__)
 
 
 class ModelValidator:
-
     def __init__(self, tolerance: float = 0.01, sample_count: int = 50) -> None:
         self._tolerance = tolerance
         self._sample_count = sample_count
@@ -19,6 +18,7 @@ class ModelValidator:
     def validate_onnx(self, model_path: str) -> dict[str, Any]:
         try:
             import onnx
+
             model = onnx.load(model_path)
             onnx.checker.check_model(model)
 
@@ -33,12 +33,10 @@ class ModelValidator:
                 "num_inputs": len(graph.input),
                 "num_outputs": len(graph.output),
                 "input_shapes": {
-                    inp.name: [d.dim_value for d in inp.type.tensor_type.shape.dim]
-                    for inp in graph.input
+                    inp.name: [d.dim_value for d in inp.type.tensor_type.shape.dim] for inp in graph.input
                 },
                 "output_shapes": {
-                    out.name: [d.dim_value for d in out.type.tensor_type.shape.dim]
-                    for out in graph.output
+                    out.name: [d.dim_value for d in out.type.tensor_type.shape.dim] for out in graph.output
                 },
                 "op_types": list(set(n.op_type for n in graph.node)),
             }
@@ -103,6 +101,7 @@ class ModelValidator:
         providers: list[str] | None = None,
     ) -> dict[str, Any]:
         import time
+
         import onnxruntime as ort
 
         providers = providers or ["CPUExecutionProvider"]

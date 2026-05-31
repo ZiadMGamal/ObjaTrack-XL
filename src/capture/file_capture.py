@@ -5,9 +5,9 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from src.capture.base_capture import BaseCaptureSource, CaptureBackend
+from src.capture.base_capture import BaseCaptureSource
 from src.core.base import ComponentState
-from src.core.exceptions import CaptureConnectionError, CaptureError
+from src.core.exceptions import CaptureConnectionError
 from src.core.registry import capture_registry
 from src.utils.logger import get_logger
 
@@ -16,7 +16,6 @@ logger = get_logger(__name__)
 
 @capture_registry.register("file")
 class FileCapture(BaseCaptureSource):
-
     def __init__(
         self,
         file_path: str,

@@ -4,16 +4,15 @@ import numpy as np
 import pytest
 
 from src.tracking.association import (
-    iou_distance,
     euclidean_distance,
-    linear_assignment,
-    greedy_assignment,
     fuse_iou_score,
+    greedy_assignment,
+    iou_distance,
+    linear_assignment,
 )
 
 
 class TestIoUDistance:
-
     def test_empty_inputs(self) -> None:
         result = iou_distance(np.empty((0, 4)), np.array([[10, 10, 50, 50]]))
         assert result.shape[0] == 0
@@ -38,7 +37,6 @@ class TestIoUDistance:
 
 
 class TestEuclideanDistance:
-
     def test_empty_inputs(self) -> None:
         result = euclidean_distance(np.empty((0, 2)), np.array([[1, 1]]))
         assert result.shape[0] == 0
@@ -56,60 +54,65 @@ class TestEuclideanDistance:
 
 
 class TestLinearAssignment:
-
     def test_empty_matrix(self) -> None:
         cost = np.empty((0, 0))
         matches, ut, ud = linear_assignment(cost)
         assert len(matches) == 0
 
     def test_perfect_assignment(self) -> None:
-        cost = np.array([
-            [0.1, 0.9],
-            [0.9, 0.1],
-        ])
+        cost = np.array(
+            [
+                [0.1, 0.9],
+                [0.9, 0.1],
+            ]
+        )
         matches, ut, ud = linear_assignment(cost, threshold=0.5)
         assert len(matches) == 2
         assert len(ut) == 0
         assert len(ud) == 0
 
     def test_threshold_filtering(self) -> None:
-        cost = np.array([
-            [0.9, 0.9],
-            [0.9, 0.9],
-        ])
+        cost = np.array(
+            [
+                [0.9, 0.9],
+                [0.9, 0.9],
+            ]
+        )
         matches, ut, ud = linear_assignment(cost, threshold=0.5)
         assert len(matches) == 0
         assert len(ut) == 2
         assert len(ud) == 2
 
     def test_uneven_dimensions(self) -> None:
-        cost = np.array([
-            [0.1, 0.5, 0.9],
-            [0.9, 0.1, 0.5],
-        ])
+        cost = np.array(
+            [
+                [0.1, 0.5, 0.9],
+                [0.9, 0.1, 0.5],
+            ]
+        )
         matches, ut, ud = linear_assignment(cost, threshold=0.5)
         assert len(matches) == 2
         assert len(ud) == 1
 
 
 class TestGreedyAssignment:
-
     def test_empty_matrix(self) -> None:
         cost = np.empty((0, 0))
         matches, ut, ud = greedy_assignment(cost)
         assert len(matches) == 0
 
     def test_simple_assignment(self) -> None:
-        cost = np.array([
-            [0.1, 0.9],
-            [0.9, 0.1],
-        ])
+        cost = np.array(
+            [
+                [0.1, 0.9],
+                [0.9, 0.1],
+            ]
+        )
         matches, ut, ud = greedy_assignment(cost, threshold=0.5)
         assert len(matches) == 2
 
 
 class TestFuseIoUScore:
-
     def test_empty(self) -> None:
         cost = np.empty((0, 0))
         scores = np.array([])

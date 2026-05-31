@@ -5,7 +5,6 @@ from collections import deque
 
 
 class FPSCounter:
-
     def __init__(self, window_size: int = 60) -> None:
         self._window_size = window_size
         self._timestamps: deque[float] = deque(maxlen=window_size)

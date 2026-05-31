@@ -1,23 +1,21 @@
 from __future__ import annotations
 
-import io
 import time
 from typing import Any
 
 import cv2
 import numpy as np
-from fastapi import FastAPI, File, UploadFile, HTTPException, Query
+from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from src.config.settings import Settings
-from src.detection.detector_factory import DetectorFactory
 from src.detection.base_detector import BaseObjectDetector
-from src.tracking.tracker_factory import TrackerFactory
-from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.track import Track
+from src.detection.detector_factory import DetectorFactory
 from src.metrics.metrics_aggregator import MetricsAggregator
+from src.tracking.base_tracker import BaseObjectTracker
+from src.tracking.tracker_factory import TrackerFactory
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -147,12 +145,14 @@ async def detect(
 
     detections = []
     for i in range(result.num_detections):
-        detections.append({
-            "box": result.boxes[i].tolist(),
-            "score": round(float(result.scores[i]), 4),
-            "class_id": int(result.class_ids[i]),
-            "class_name": result.class_names[i] if result.class_names else "",
-        })
+        detections.append(
+            {
+                "box": result.boxes[i].tolist(),
+                "score": round(float(result.scores[i]), 4),
+                "class_id": int(result.class_ids[i]),
+                "class_name": result.class_names[i] if result.class_names else "",
+            }
+        )
 
     if _metrics:
         _metrics.tick()
@@ -212,6 +212,7 @@ async def reset_tracker() -> dict[str, str]:
 @app.get("/info")
 async def info() -> dict[str, Any]:
     from src.utils.device import DeviceManager
+
     dm = DeviceManager()
     return {
         "project": "ObjaTrack-XL",

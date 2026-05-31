@@ -12,7 +12,6 @@ logger = get_logger(__name__)
 
 
 class VideoWriter:
-
     def __init__(
         self,
         output_path: str,
@@ -52,7 +51,9 @@ class VideoWriter:
 
         fourcc = cv2.VideoWriter_fourcc(*self._codec)
         self._writer = cv2.VideoWriter(
-            str(self._output_path), fourcc, self._fps,
+            str(self._output_path),
+            fourcc,
+            self._fps,
             (self._width, self._height),
         )
 

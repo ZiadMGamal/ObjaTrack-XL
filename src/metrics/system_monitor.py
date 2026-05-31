@@ -9,7 +9,6 @@ import psutil
 
 
 class SystemMonitor:
-
     def __init__(self, sampling_interval: float = 1.0) -> None:
         self._sampling_interval = sampling_interval
         self._process = psutil.Process(os.getpid())
@@ -31,8 +30,8 @@ class SystemMonitor:
         self._memory_history.append(memory_percent)
 
         if len(self._cpu_history) > self._max_history:
-            self._cpu_history = self._cpu_history[-self._max_history:]
-            self._memory_history = self._memory_history[-self._max_history:]
+            self._cpu_history = self._cpu_history[-self._max_history :]
+            self._memory_history = self._memory_history[-self._max_history :]
 
         return {
             "cpu_percent": round(cpu_percent, 1),
@@ -47,7 +46,7 @@ class SystemMonitor:
             "processor": platform.processor(),
             "cpu_count_logical": psutil.cpu_count(logical=True),
             "cpu_count_physical": psutil.cpu_count(logical=False),
-            "total_memory_gb": round(psutil.virtual_memory().total / (1024 ** 3), 1),
+            "total_memory_gb": round(psutil.virtual_memory().total / (1024**3), 1),
             "python_version": platform.python_version(),
             "pid": os.getpid(),
         }

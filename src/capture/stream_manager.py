@@ -8,10 +8,9 @@ import numpy as np
 from src.capture.base_capture import BaseCaptureSource
 from src.capture.camera_capture import CameraCapture
 from src.capture.file_capture import FileCapture
-from src.capture.rtsp_capture import RTSPCapture
 from src.capture.frame_buffer import FrameBuffer
+from src.capture.rtsp_capture import RTSPCapture
 from src.config.settings import CaptureSettings
-from src.core.base import ComponentState
 from src.core.exceptions import CaptureError, ConfigurationError
 from src.utils.logger import get_logger
 
@@ -19,7 +18,6 @@ logger = get_logger(__name__)
 
 
 class StreamManager:
-
     def __init__(self, settings: CaptureSettings | None = None) -> None:
         self._settings = settings or CaptureSettings()
         self._sources: dict[str, BaseCaptureSource] = {}

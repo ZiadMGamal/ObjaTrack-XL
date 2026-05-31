@@ -10,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class JSONExporter:
-
     def __init__(self, output_path: str = "outputs/exports/results.json") -> None:
         self._output_path = Path(output_path)
         self._data: dict[str, Any] = {

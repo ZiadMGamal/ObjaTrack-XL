@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Any
 
 import numpy as np
 
@@ -13,7 +12,6 @@ logger = get_logger(__name__)
 
 
 class BaseObjectTracker(BaseTracker):
-
     def __init__(
         self,
         max_age: int = 30,
@@ -86,11 +84,10 @@ class BaseObjectTracker(BaseTracker):
         self._active_tracks = len(self._tracks)
 
         if len(self._deleted_tracks) > self._max_deleted_history:
-            self._deleted_tracks = self._deleted_tracks[-self._max_deleted_history:]
+            self._deleted_tracks = self._deleted_tracks[-self._max_deleted_history :]
 
     @abstractmethod
-    def update(self, detections: DetectionResult, frame: np.ndarray | None = None) -> list[Track]:
-        ...
+    def update(self, detections: DetectionResult, frame: np.ndarray | None = None) -> list[Track]: ...
 
     def reset(self) -> None:
         self._tracks.clear()

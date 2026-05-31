@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
 
 import cv2
 import numpy as np
@@ -11,7 +10,6 @@ from src.visualization.color_palette import ColorPalette
 
 
 class TrajectoryVisualizer:
-
     def __init__(
         self,
         max_length: int = 100,
@@ -38,7 +36,7 @@ class TrajectoryVisualizer:
             active_ids.add(track.track_id)
             self._trajectories[track.track_id].append(track.center)
             if len(self._trajectories[track.track_id]) > self._max_length:
-                self._trajectories[track.track_id] = self._trajectories[track.track_id][-self._max_length:]
+                self._trajectories[track.track_id] = self._trajectories[track.track_id][-self._max_length :]
 
         stale_ids = [tid for tid in self._trajectories if tid not in active_ids]
         for tid in stale_ids:

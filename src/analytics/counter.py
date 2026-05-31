@@ -1,19 +1,16 @@
 from __future__ import annotations
 
-from typing import Any
 from collections import defaultdict
-
-import numpy as np
+from typing import Any
 
 from src.tracking.track import Track
-from src.utils.math_utils import MathUtils
 from src.utils.logger import get_logger
+from src.utils.math_utils import MathUtils
 
 logger = get_logger(__name__)
 
 
 class ObjectCounter:
-
     def __init__(
         self,
         line_start: tuple[int, int] = (0, 360),
@@ -107,10 +104,7 @@ class ObjectCounter:
         d_curr = (x2 - x1) * (current[1] - y1) - (y2 - y1) * (current[0] - x1)
 
         if d_prev * d_curr < 0:
-            intersection = MathUtils.line_intersection(
-                prev, current,
-                (float(x1), float(y1)), (float(x2), float(y2))
-            )
+            intersection = MathUtils.line_intersection(prev, current, (float(x1), float(y1)), (float(x2), float(y2)))
             if intersection is not None:
                 return 1 if d_curr > 0 else -1
 

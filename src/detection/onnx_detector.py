@@ -20,7 +20,6 @@ logger = get_logger(__name__)
 
 @detector_registry.register("onnx")
 class ONNXDetector(BaseObjectDetector):
-
     def __init__(
         self,
         model_path: str,
@@ -125,9 +124,7 @@ class ONNXDetector(BaseObjectDetector):
             self.set_state(ComponentState.READY)
             raise DetectionError(f"ONNX inference failed: {e}")
 
-        detection_result = self._postprocess(
-            outputs[0], original_shape, ratio, padding, timestamp
-        )
+        detection_result = self._postprocess(outputs[0], original_shape, ratio, padding, timestamp)
 
         detection_result = self.filter_classes(detection_result)
         self._inference_count += 1
@@ -189,7 +186,7 @@ class ONNXDetector(BaseObjectDetector):
 
         keep = non_max_suppression(boxes_xyxy, scores, self._iou_threshold)
         if len(keep) > self._max_detections:
-            keep = keep[:self._max_detections]
+            keep = keep[: self._max_detections]
 
         boxes_xyxy = boxes_xyxy[keep]
         scores = scores[keep]
@@ -225,12 +222,8 @@ class ONNXDetector(BaseObjectDetector):
         inputs = self._session.get_inputs()
         outputs = self._session.get_outputs()
 
-        metadata["inputs"] = [
-            {"name": i.name, "shape": i.shape, "type": i.type} for i in inputs
-        ]
-        metadata["outputs"] = [
-            {"name": o.name, "shape": o.shape, "type": o.type} for o in outputs
-        ]
+        metadata["inputs"] = [{"name": i.name, "shape": i.shape, "type": i.type} for i in inputs]
+        metadata["outputs"] = [{"name": o.name, "shape": o.shape, "type": o.type} for o in outputs]
         metadata["providers"] = self._session.get_providers()
 
         return metadata

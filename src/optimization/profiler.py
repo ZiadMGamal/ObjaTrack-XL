@@ -11,13 +11,13 @@ logger = get_logger(__name__)
 
 
 class ModelProfiler:
-
     def __init__(self, model_path: str) -> None:
         self._model_path = model_path
 
     def profile_onnx(self) -> dict[str, Any]:
         try:
             import onnx
+
             model = onnx.load(self._model_path)
             graph = model.graph
 
@@ -33,12 +33,14 @@ class ModelProfiler:
                 for d in shape:
                     params *= d
                 total_params += params
-                initializer_info.append({
-                    "name": init.name,
-                    "shape": shape,
-                    "params": params,
-                    "dtype": str(init.data_type),
-                })
+                initializer_info.append(
+                    {
+                        "name": init.name,
+                        "shape": shape,
+                        "params": params,
+                        "dtype": str(init.data_type),
+                    }
+                )
 
             return {
                 "model": Path(self._model_path).name,
@@ -61,6 +63,7 @@ class ModelProfiler:
         providers: list[str] | None = None,
     ) -> dict[str, Any]:
         import time
+
         import onnxruntime as ort
 
         providers = providers or ["CPUExecutionProvider"]
@@ -68,9 +71,7 @@ class ModelProfiler:
         sess_options = ort.SessionOptions()
         sess_options.enable_profiling = True
 
-        session = ort.InferenceSession(
-            self._model_path, sess_options=sess_options, providers=providers
-        )
+        session = ort.InferenceSession(self._model_path, sess_options=sess_options, providers=providers)
 
         input_info = session.get_inputs()[0]
         shape = [s if isinstance(s, int) else 1 for s in input_info.shape]
@@ -109,6 +110,7 @@ class ModelProfiler:
     def estimate_flops(self) -> dict[str, Any]:
         try:
             import onnx
+
             model = onnx.load(self._model_path)
 
             total_flops = 0

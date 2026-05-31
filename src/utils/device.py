@@ -24,7 +24,6 @@ class DeviceInfo:
 
 
 class DeviceManager:
-
     _instance: DeviceManager | None = None
     _device_info: DeviceInfo | None = None
 
@@ -47,7 +46,9 @@ class DeviceManager:
             self._device_info.total_memory_mb = props.total_mem / (1024 * 1024)
             self._device_info.compute_capability = (props.major, props.minor)
             self._device_info.cuda_version = torch.version.cuda or ""
-            self._device_info.cudnn_version = str(torch.backends.cudnn.version()) if torch.backends.cudnn.is_available() else ""
+            self._device_info.cudnn_version = (
+                str(torch.backends.cudnn.version()) if torch.backends.cudnn.is_available() else ""
+            )
             self._device_info.properties = {
                 "multi_processor_count": props.multi_processor_count,
                 "max_threads_per_multi_processor": props.max_threads_per_multi_processor,

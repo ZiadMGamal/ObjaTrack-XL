@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 
 from src.utils.logger import get_logger
@@ -82,17 +80,17 @@ def soft_nms(
         scores[[i, max_idx]] = scores[[max_idx, i]]
         indices[[i, max_idx]] = indices[[max_idx, i]]
 
-        xx1 = np.maximum(boxes[i, 0], boxes[i + 1:, 0])
-        yy1 = np.maximum(boxes[i, 1], boxes[i + 1:, 1])
-        xx2 = np.minimum(boxes[i, 2], boxes[i + 1:, 2])
-        yy2 = np.minimum(boxes[i, 3], boxes[i + 1:, 3])
+        xx1 = np.maximum(boxes[i, 0], boxes[i + 1 :, 0])
+        yy1 = np.maximum(boxes[i, 1], boxes[i + 1 :, 1])
+        xx2 = np.minimum(boxes[i, 2], boxes[i + 1 :, 2])
+        yy2 = np.minimum(boxes[i, 3], boxes[i + 1 :, 3])
 
         w = np.maximum(0.0, xx2 - xx1)
         h = np.maximum(0.0, yy2 - yy1)
         intersection = w * h
 
         area_i = (boxes[i, 2] - boxes[i, 0]) * (boxes[i, 3] - boxes[i, 1])
-        areas_rest = (boxes[i + 1:, 2] - boxes[i + 1:, 0]) * (boxes[i + 1:, 3] - boxes[i + 1:, 1])
+        areas_rest = (boxes[i + 1 :, 2] - boxes[i + 1 :, 0]) * (boxes[i + 1 :, 3] - boxes[i + 1 :, 1])
         union = area_i + areas_rest - intersection
         iou = intersection / np.maximum(union, 1e-7)
 
@@ -103,7 +101,7 @@ def soft_nms(
         else:
             weight = np.where(iou > iou_threshold, np.zeros_like(iou), np.ones_like(iou))
 
-        scores[i + 1:] *= weight
+        scores[i + 1 :] *= weight
 
     keep = np.where(scores > score_threshold)[0]
     return indices[keep], scores[keep]

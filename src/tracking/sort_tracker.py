@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 
 from src.core.base import ComponentState, DetectionResult
 from src.core.registry import tracker_registry
-from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.track import Track, TrackState
-from src.tracking.kalman_filter import KalmanFilterXYAH
 from src.tracking.association import iou_distance, linear_assignment
+from src.tracking.base_tracker import BaseObjectTracker
+from src.tracking.kalman_filter import KalmanFilterXYAH
+from src.tracking.track import Track, TrackState
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -17,7 +15,6 @@ logger = get_logger(__name__)
 
 @tracker_registry.register("sort")
 class SORTTracker(BaseObjectTracker):
-
     def __init__(
         self,
         max_age: int = 30,

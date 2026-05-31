@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import time
 import functools
-from typing import Any, Callable, TypeVar
+import time
+from collections.abc import Callable
 from contextlib import ContextDecorator
+from typing import Any, TypeVar
 
 from src.utils.logger import get_logger
 
@@ -13,7 +14,6 @@ logger = get_logger(__name__)
 
 
 class Timer(ContextDecorator):
-
     def __init__(self, name: str = "operation", log_output: bool = False) -> None:
         self._name = name
         self._log_output = log_output
@@ -53,7 +53,6 @@ class Timer(ContextDecorator):
 
 
 class AccumulatingTimer:
-
     def __init__(self, name: str = "accumulator") -> None:
         self._name = name
         self._total_time: float = 0.0
@@ -128,7 +127,6 @@ class AccumulatingTimer:
 
 
 class _AccumulatingTimerContext:
-
     def __init__(self, accumulator: AccumulatingTimer, timer: Timer) -> None:
         self._accumulator = accumulator
         self._timer = timer

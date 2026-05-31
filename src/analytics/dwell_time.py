@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import time
-from typing import Any
 from collections import defaultdict
+from typing import Any
 
 from src.tracking.track import Track
 from src.utils.logger import get_logger
@@ -11,7 +11,6 @@ logger = get_logger(__name__)
 
 
 class DwellTimeAnalyzer:
-
     def __init__(
         self,
         threshold_seconds: float = 10.0,
@@ -42,9 +41,7 @@ class DwellTimeAnalyzer:
             dwell = current_time - self._entry_times[track.track_id]
             self._dwell_times[track.track_id] = dwell
 
-            if (self._alert_on_threshold
-                and dwell >= self._threshold
-                and track.track_id not in self._alerted_ids):
+            if self._alert_on_threshold and dwell >= self._threshold and track.track_id not in self._alerted_ids:
                 self._alerted_ids.add(track.track_id)
                 event = {
                     "type": "dwell_threshold",

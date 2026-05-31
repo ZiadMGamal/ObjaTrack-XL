@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import Any
-from dataclasses import dataclass, field
 
 import numpy as np
 
@@ -93,10 +93,12 @@ class Track:
         self.age += 1
 
         new_center = self.center
-        self.velocity = np.array([
-            new_center[0] - old_center[0],
-            new_center[1] - old_center[1],
-        ])
+        self.velocity = np.array(
+            [
+                new_center[0] - old_center[0],
+                new_center[1] - old_center[1],
+            ]
+        )
         self.trajectory.append(new_center)
 
     def mark_missed(self) -> None:

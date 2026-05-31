@@ -13,7 +13,6 @@ logger = get_logger(__name__)
 
 
 class FrameBuffer:
-
     def __init__(
         self,
         max_size: int = 128,
@@ -142,7 +141,6 @@ class FrameBuffer:
 
 
 class FrameEntry:
-
     __slots__ = ("frame", "timestamp", "frame_id", "metadata")
 
     def __init__(

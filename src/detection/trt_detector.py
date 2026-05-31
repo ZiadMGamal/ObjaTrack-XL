@@ -11,7 +11,6 @@ logger = get_logger(__name__)
 
 @detector_registry.register("tensorrt")
 class TensorRTDetector(BaseObjectDetector):
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._engine = None
@@ -21,6 +20,7 @@ class TensorRTDetector(BaseObjectDetector):
         self.set_state(ComponentState.INITIALIZING)
         try:
             import tensorrt as trt
+
             self._trt = trt
             logger.info("tensorrt_available", version=trt.__version__)
         except ImportError:

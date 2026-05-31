@@ -10,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class DetectionPreprocessor:
-
     def __init__(
         self,
         input_size: tuple[int, int] = (640, 640),
@@ -40,9 +39,7 @@ class DetectionPreprocessor:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
         if self._letterbox:
-            image, ratio, padding = ImageProcessor.letterbox(
-                image, self._input_size, color=self._pad_color
-            )
+            image, ratio, padding = ImageProcessor.letterbox(image, self._input_size, color=self._pad_color)
         else:
             ratio = min(
                 self._input_size[0] / image.shape[0],

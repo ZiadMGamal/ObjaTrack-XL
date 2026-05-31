@@ -7,7 +7,6 @@ import psutil
 
 
 class MemoryMonitor:
-
     def __init__(self, enable_gpu: bool = False) -> None:
         self._enable_gpu = enable_gpu
         self._process = psutil.Process(os.getpid())
@@ -16,6 +15,7 @@ class MemoryMonitor:
         if enable_gpu:
             try:
                 import GPUtil
+
                 self._gputil = GPUtil
                 self._gpu_available = True
             except ImportError:
@@ -66,6 +66,7 @@ class MemoryMonitor:
     def get_torch_memory(self) -> dict[str, float]:
         try:
             import torch
+
             if not torch.cuda.is_available():
                 return {"available": False}
 

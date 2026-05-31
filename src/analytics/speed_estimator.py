@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import time
-from typing import Any
 from collections import defaultdict
-
-import numpy as np
+from typing import Any
 
 from src.tracking.track import Track
 from src.utils.logger import get_logger
@@ -13,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class SpeedEstimator:
-
     def __init__(
         self,
         pixels_per_meter: float = 8.0,
@@ -65,7 +61,7 @@ class SpeedEstimator:
 
             self._track_speeds[track.track_id].append(speed)
             if len(self._track_speeds[track.track_id]) > self._smoothing_window:
-                self._track_speeds[track.track_id] = self._track_speeds[track.track_id][-self._smoothing_window:]
+                self._track_speeds[track.track_id] = self._track_speeds[track.track_id][-self._smoothing_window :]
 
             smoothed = sum(self._track_speeds[track.track_id]) / len(self._track_speeds[track.track_id])
             self._current_speeds[track.track_id] = smoothed

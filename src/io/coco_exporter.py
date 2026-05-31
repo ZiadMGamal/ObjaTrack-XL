@@ -10,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class COCOExporter:
-
     def __init__(self, output_path: str = "outputs/exports/coco_results.json") -> None:
         self._output_path = Path(output_path)
         self._annotations: list[dict[str, Any]] = []
@@ -32,12 +31,14 @@ class COCOExporter:
         width: int,
         height: int,
     ) -> None:
-        self._images.append({
-            "id": image_id,
-            "file_name": file_name,
-            "width": width,
-            "height": height,
-        })
+        self._images.append(
+            {
+                "id": image_id,
+                "file_name": file_name,
+                "width": width,
+                "height": height,
+            }
+        )
 
     def add_detection(
         self,
@@ -52,15 +53,17 @@ class COCOExporter:
         h = y2 - y1
         bbox_xywh = [round(x1, 1), round(y1, 1), round(w, 1), round(h, 1)]
 
-        self._annotations.append({
-            "id": self._annotation_id,
-            "image_id": image_id,
-            "category_id": category_id,
-            "bbox": bbox_xywh,
-            "area": round(area or (w * h), 1),
-            "score": round(score, 4),
-            "iscrowd": 0,
-        })
+        self._annotations.append(
+            {
+                "id": self._annotation_id,
+                "image_id": image_id,
+                "category_id": category_id,
+                "bbox": bbox_xywh,
+                "area": round(area or (w * h), 1),
+                "score": round(score, 4),
+                "iscrowd": 0,
+            }
+        )
         self._annotation_id += 1
 
     def add_frame_detections(
@@ -106,18 +109,18 @@ class COCOExporter:
         return str(self._output_path)
 
     def export_results_only(self) -> str:
-        results_path = self._output_path.with_name(
-            self._output_path.stem + "_results" + self._output_path.suffix
-        )
+        results_path = self._output_path.with_name(self._output_path.stem + "_results" + self._output_path.suffix)
 
         results = []
         for ann in self._annotations:
-            results.append({
-                "image_id": ann["image_id"],
-                "category_id": ann["category_id"],
-                "bbox": ann["bbox"],
-                "score": ann["score"],
-            })
+            results.append(
+                {
+                    "image_id": ann["image_id"],
+                    "category_id": ann["category_id"],
+                    "bbox": ann["bbox"],
+                    "score": ann["score"],
+                }
+            )
 
         with open(results_path, "w") as f:
             json.dump(results, f, indent=2)

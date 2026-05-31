@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 
 from src.core.base import ComponentState, DetectionResult
 from src.core.registry import tracker_registry
+from src.tracking.association import fuse_iou_score, iou_distance, linear_assignment
 from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.track import Track, TrackState
 from src.tracking.kalman_filter import KalmanFilterXYAH
-from src.tracking.association import iou_distance, linear_assignment, fuse_iou_score
+from src.tracking.track import Track, TrackState
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -17,7 +15,6 @@ logger = get_logger(__name__)
 
 @tracker_registry.register("botsort")
 class BoTSORTTracker(BaseObjectTracker):
-
     def __init__(
         self,
         max_age: int = 30,
@@ -112,9 +109,7 @@ class BoTSORTTracker(BaseObjectTracker):
             cost = iou_distance(confirmed_boxes, high_boxes)
             if self._fuse_score:
                 cost = fuse_iou_score(cost, high_scores)
-            matches_1, unmatched_t1, unmatched_d1 = linear_assignment(
-                cost, threshold=1.0 - self._match_thresh
-            )
+            matches_1, unmatched_t1, unmatched_d1 = linear_assignment(cost, threshold=1.0 - self._match_thresh)
         else:
             matches_1 = []
             unmatched_t1 = list(range(len(confirmed)))
@@ -122,8 +117,10 @@ class BoTSORTTracker(BaseObjectTracker):
 
         for t_idx, d_idx in matches_1:
             self._apply_update(
-                confirmed[t_idx], high_boxes[d_idx],
-                float(high_scores[d_idx]), int(high_class_ids[d_idx]),
+                confirmed[t_idx],
+                high_boxes[d_idx],
+                float(high_scores[d_idx]),
+                int(high_class_ids[d_idx]),
                 high_names[d_idx] if high_names else "",
             )
 
@@ -139,8 +136,10 @@ class BoTSORTTracker(BaseObjectTracker):
 
         for t_idx, d_idx in matches_2:
             self._apply_update(
-                remaining[t_idx], low_boxes[d_idx],
-                float(low_scores[d_idx]), int(low_class_ids[d_idx]),
+                remaining[t_idx],
+                low_boxes[d_idx],
+                float(low_scores[d_idx]),
+                int(low_class_ids[d_idx]),
                 low_names[d_idx] if low_names else "",
             )
 
@@ -164,8 +163,10 @@ class BoTSORTTracker(BaseObjectTracker):
         for t_idx, d_idx in matches_3:
             actual_idx = unmatched_d1[d_idx]
             self._apply_update(
-                unconfirmed[t_idx], high_boxes[actual_idx],
-                float(high_scores[actual_idx]), int(high_class_ids[actual_idx]),
+                unconfirmed[t_idx],
+                high_boxes[actual_idx],
+                float(high_scores[actual_idx]),
+                int(high_class_ids[actual_idx]),
                 high_names[actual_idx] if high_names else "",
             )
 
@@ -177,7 +178,8 @@ class BoTSORTTracker(BaseObjectTracker):
             score = float(high_scores[actual_idx])
             if score >= self._new_track_thresh:
                 track = self._create_track(
-                    high_boxes[actual_idx], score,
+                    high_boxes[actual_idx],
+                    score,
                     int(high_class_ids[actual_idx]),
                     high_names[actual_idx] if high_names else "",
                 )

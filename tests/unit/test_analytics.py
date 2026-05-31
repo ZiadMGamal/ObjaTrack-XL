@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from src.analytics.counter import ObjectCounter
-from src.analytics.speed_estimator import SpeedEstimator
 from src.analytics.dwell_time import DwellTimeAnalyzer
+from src.analytics.speed_estimator import SpeedEstimator
 from src.tracking.track import Track, TrackState
 
 
@@ -24,7 +23,6 @@ def _make_track(track_id: int, center: tuple[float, float], class_name: str = "p
 
 
 class TestObjectCounter:
-
     def test_initialization(self) -> None:
         counter = ObjectCounter(
             line_start=(0, 360),
@@ -72,7 +70,6 @@ class TestObjectCounter:
 
 
 class TestSpeedEstimator:
-
     def test_initialization(self) -> None:
         estimator = SpeedEstimator(pixels_per_meter=10.0, fps=30.0)
         assert estimator.pixels_per_meter == 10.0
@@ -107,7 +104,6 @@ class TestSpeedEstimator:
 
 
 class TestDwellTimeAnalyzer:
-
     def test_initialization(self) -> None:
         analyzer = DwellTimeAnalyzer(threshold_seconds=10.0)
         assert analyzer.threshold == 10.0

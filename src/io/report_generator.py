@@ -105,7 +105,6 @@ tr:hover{background:#16213e33}
 
 
 class ReportGenerator:
-
     def __init__(
         self,
         output_path: str = "outputs/reports/report.html",
@@ -123,12 +122,14 @@ class ReportGenerator:
         self._extra_sections: list[dict[str, Any]] = []
 
     def add_summary_card(self, label: str, value: str, unit: str = "", status: str = "") -> None:
-        self._summary_cards.append({
-            "label": label,
-            "value": value,
-            "unit": unit,
-            "status": status,
-        })
+        self._summary_cards.append(
+            {
+                "label": label,
+                "value": value,
+                "unit": unit,
+                "status": status,
+            }
+        )
 
     def set_benchmark_table(self, headers: list[str], rows: list[list[str]]) -> None:
         self._benchmark_headers = headers
@@ -141,19 +142,23 @@ class ReportGenerator:
         self._system_info = info
 
     def add_table_section(self, title: str, headers: list[str], rows: list[list[str]]) -> None:
-        self._extra_sections.append({
-            "title": title,
-            "type": "table",
-            "headers": headers,
-            "rows": rows,
-        })
+        self._extra_sections.append(
+            {
+                "title": title,
+                "type": "table",
+                "headers": headers,
+                "rows": rows,
+            }
+        )
 
     def add_text_section(self, title: str, content: str) -> None:
-        self._extra_sections.append({
-            "title": title,
-            "type": "text",
-            "content": content,
-        })
+        self._extra_sections.append(
+            {
+                "title": title,
+                "type": "text",
+                "content": content,
+            }
+        )
 
     def generate(self) -> str:
         self._output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -180,8 +185,12 @@ class ReportGenerator:
 
     def generate_from_metrics(self, metrics: dict[str, Any]) -> str:
         fps_data = metrics.get("fps", {})
-        self.add_summary_card("Current FPS", str(fps_data.get("current_fps", 0)), "fps",
-                              "good" if fps_data.get("current_fps", 0) >= 25 else "warn")
+        self.add_summary_card(
+            "Current FPS",
+            str(fps_data.get("current_fps", 0)),
+            "fps",
+            "good" if fps_data.get("current_fps", 0) >= 25 else "warn",
+        )
         self.add_summary_card("Average FPS", str(fps_data.get("average_fps", 0)), "fps")
         self.add_summary_card("Total Frames", str(fps_data.get("total_frames", 0)), "frames")
         self.add_summary_card("Uptime", str(metrics.get("uptime_seconds", 0)), "seconds")

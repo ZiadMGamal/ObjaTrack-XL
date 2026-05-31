@@ -1,43 +1,38 @@
 from __future__ import annotations
 
-import time
 import signal
-import sys
+import time
 from typing import Any
 
 import cv2
-import numpy as np
 
-from src.config.settings import Settings
-from src.config.validator import ConfigValidator
-from src.capture.stream_manager import StreamManager
-from src.detection.detector_factory import DetectorFactory
-from src.detection.base_detector import BaseObjectDetector
-from src.tracking.tracker_factory import TrackerFactory
-from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.track import Track
-from src.visualization.renderer import OverlayRenderer
-from src.visualization.hud import HeadsUpDisplay
-from src.visualization.trajectory import TrajectoryVisualizer
-from src.visualization.heatmap import DetectionHeatmap
 from src.analytics.counter import ObjectCounter
-from src.analytics.zone import ZoneAnalytics
-from src.analytics.speed_estimator import SpeedEstimator
 from src.analytics.dwell_time import DwellTimeAnalyzer
 from src.analytics.event_detector import EventDetector
-from src.metrics.metrics_aggregator import MetricsAggregator
-from src.io.video_writer import VideoWriter
-from src.io.json_exporter import JSONExporter
-from src.io.csv_exporter import CSVExporter
-from src.core.base import ComponentState, DetectionResult
+from src.analytics.speed_estimator import SpeedEstimator
+from src.analytics.zone import ZoneAnalytics
+from src.capture.stream_manager import StreamManager
+from src.config.settings import Settings
+from src.config.validator import ConfigValidator
 from src.core.exceptions import PipelineError, PipelineStageError
+from src.detection.base_detector import BaseObjectDetector
+from src.detection.detector_factory import DetectorFactory
+from src.io.csv_exporter import CSVExporter
+from src.io.json_exporter import JSONExporter
+from src.io.video_writer import VideoWriter
+from src.metrics.metrics_aggregator import MetricsAggregator
+from src.tracking.base_tracker import BaseObjectTracker
+from src.tracking.tracker_factory import TrackerFactory
 from src.utils.logger import get_logger, setup_logging
+from src.visualization.heatmap import DetectionHeatmap
+from src.visualization.hud import HeadsUpDisplay
+from src.visualization.renderer import OverlayRenderer
+from src.visualization.trajectory import TrajectoryVisualizer
 
 logger = get_logger(__name__)
 
 
 class PipelineEngine:
-
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
         self._stream_manager: StreamManager | None = None
@@ -111,7 +106,9 @@ class PipelineEngine:
             self._hud = HeadsUpDisplay()
             self._trajectory_viz = TrajectoryVisualizer(max_length=vis.trajectory_length)
 
-        resolution = self._stream_manager.active_source.resolution if self._stream_manager.active_source else (1280, 720)
+        resolution = (
+            self._stream_manager.active_source.resolution if self._stream_manager.active_source else (1280, 720)
+        )
         self._heatmap = DetectionHeatmap(width=resolution[0], height=resolution[1])
 
         analytics = self._settings.analytics

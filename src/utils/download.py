@@ -29,7 +29,6 @@ MODEL_CHECKSUMS: dict[str, str] = {
 
 
 class ModelDownloader:
-
     def __init__(self, model_dir: str = "models", timeout: float = 120.0) -> None:
         self._model_dir = Path(model_dir)
         self._model_dir.mkdir(parents=True, exist_ok=True)
@@ -124,12 +123,14 @@ class ModelDownloader:
         models = []
         for path in self._model_dir.glob("*"):
             if path.is_file() and path.suffix in (".pt", ".onnx", ".engine", ".trt"):
-                models.append({
-                    "name": path.name,
-                    "path": str(path),
-                    "size_mb": round(path.stat().st_size / (1024 * 1024), 2),
-                    "format": path.suffix[1:],
-                })
+                models.append(
+                    {
+                        "name": path.name,
+                        "path": str(path),
+                        "size_mb": round(path.stat().st_size / (1024 * 1024), 2),
+                        "format": path.suffix[1:],
+                    }
+                )
         return models
 
     def delete_model(self, model_name: str) -> bool:

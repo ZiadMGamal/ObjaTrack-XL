@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from src.tracking.track import Track, TrackState
 
 
 class TestTrack:
-
     def _make_track(self, track_id: int = 1, box: list[float] | None = None) -> Track:
         if box is None:
             box = [100.0, 100.0, 200.0, 200.0]

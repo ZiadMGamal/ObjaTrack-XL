@@ -3,12 +3,11 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from src.utils.math_utils import MathUtils
 from src.utils.image_utils import ImageProcessor
+from src.utils.math_utils import MathUtils
 
 
 class TestMathUtils:
-
     def test_iou_identical(self) -> None:
         box = np.array([10, 10, 50, 50])
         assert MathUtils.compute_iou(box, box) == pytest.approx(1.0)
@@ -47,8 +46,10 @@ class TestMathUtils:
 
     def test_line_intersection(self) -> None:
         result = MathUtils.line_intersection(
-            (0.0, 0.0), (10.0, 10.0),
-            (0.0, 10.0), (10.0, 0.0),
+            (0.0, 0.0),
+            (10.0, 10.0),
+            (0.0, 10.0),
+            (10.0, 0.0),
         )
         assert result is not None
         assert result[0] == pytest.approx(5.0)
@@ -56,14 +57,15 @@ class TestMathUtils:
 
     def test_no_intersection(self) -> None:
         result = MathUtils.line_intersection(
-            (0.0, 0.0), (1.0, 0.0),
-            (0.0, 1.0), (1.0, 1.0),
+            (0.0, 0.0),
+            (1.0, 0.0),
+            (0.0, 1.0),
+            (1.0, 1.0),
         )
         assert result is None
 
 
 class TestImageProcessor:
-
     def test_letterbox_shape(self) -> None:
         image = np.zeros((480, 640, 3), dtype=np.uint8)
         result, ratio, padding = ImageProcessor.letterbox(image, (640, 640))

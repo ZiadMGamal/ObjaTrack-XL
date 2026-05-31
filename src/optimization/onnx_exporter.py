@@ -4,10 +4,8 @@ import time
 from pathlib import Path
 from typing import Any
 
-import numpy as np
-
 from src.core.base import ComponentState
-from src.core.exceptions import ExportError, OptimizationError
+from src.core.exceptions import ExportError
 from src.core.registry import optimizer_registry
 from src.optimization.base_optimizer import BaseModelOptimizer
 from src.utils.logger import get_logger
@@ -17,7 +15,6 @@ logger = get_logger(__name__)
 
 @optimizer_registry.register("onnx")
 class ONNXExporter(BaseModelOptimizer):
-
     def __init__(
         self,
         model_path: str,
@@ -62,6 +59,7 @@ class ONNXExporter(BaseModelOptimizer):
 
         try:
             from ultralytics import YOLO
+
             model = YOLO(self._model_path)
 
             output_path = model.export(
@@ -124,6 +122,7 @@ class ONNXExporter(BaseModelOptimizer):
     def validate(self, original_path: str, optimized_path: str) -> dict[str, Any]:
         try:
             import onnx
+
             model = onnx.load(optimized_path)
             onnx.checker.check_model(model)
 

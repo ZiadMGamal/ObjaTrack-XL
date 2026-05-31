@@ -1,14 +1,11 @@
 from __future__ import annotations
 
 import time
-from collections import defaultdict
-from typing import Any
 
 from src.utils.timer import AccumulatingTimer
 
 
 class LatencyTracker:
-
     def __init__(self) -> None:
         self._timers: dict[str, AccumulatingTimer] = {}
         self._current_start: dict[str, float] = {}

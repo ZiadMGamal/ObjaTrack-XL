@@ -4,7 +4,6 @@ import numpy as np
 
 
 class KalmanFilterXYAH:
-
     def __init__(self) -> None:
         ndim = 4
         dt = 1.0
@@ -115,7 +114,6 @@ class KalmanFilterXYAH:
 
 
 class KalmanFilterXYWH:
-
     def __init__(self) -> None:
         self._dt = 1.0
         self._std_weight_position = 1.0 / 20

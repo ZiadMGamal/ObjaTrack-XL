@@ -18,7 +18,6 @@ class ComponentState(Enum):
 
 
 class BaseComponent(ABC):
-
     def __init__(self, name: str | None = None) -> None:
         self._name = name or self.__class__.__name__
         self._state = ComponentState.UNINITIALIZED
@@ -52,19 +51,16 @@ class BaseComponent(ABC):
         }
 
     @abstractmethod
-    def initialize(self) -> None:
-        ...
+    def initialize(self) -> None: ...
 
     @abstractmethod
-    def shutdown(self) -> None:
-        ...
+    def shutdown(self) -> None: ...
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(name={self._name!r}, state={self._state.value!r})"
 
 
 class BaseCapture(BaseComponent):
-
     def __init__(self, source: str | int, name: str | None = None) -> None:
         super().__init__(name=name)
         self._source = source
@@ -90,16 +86,13 @@ class BaseCapture(BaseComponent):
         return self._fps
 
     @abstractmethod
-    def read(self) -> tuple[bool, np.ndarray | None]:
-        ...
+    def read(self) -> tuple[bool, np.ndarray | None]: ...
 
     @abstractmethod
-    def is_opened(self) -> bool:
-        ...
+    def is_opened(self) -> bool: ...
 
     @abstractmethod
-    def release(self) -> None:
-        ...
+    def release(self) -> None: ...
 
     def __enter__(self) -> BaseCapture:
         self.initialize()
@@ -111,7 +104,6 @@ class BaseCapture(BaseComponent):
 
 
 class DetectionResult:
-
     __slots__ = ("boxes", "scores", "class_ids", "class_names", "masks", "keypoints", "frame_id", "timestamp")
 
     def __init__(
@@ -188,7 +180,6 @@ class DetectionResult:
 
 
 class BaseDetector(BaseComponent):
-
     def __init__(
         self,
         model_path: str,
@@ -228,12 +219,10 @@ class BaseDetector(BaseComponent):
         return self._class_names
 
     @abstractmethod
-    def detect(self, frame: np.ndarray) -> DetectionResult:
-        ...
+    def detect(self, frame: np.ndarray) -> DetectionResult: ...
 
     @abstractmethod
-    def warmup(self, iterations: int = 10) -> None:
-        ...
+    def warmup(self, iterations: int = 10) -> None: ...
 
     def preprocess(self, frame: np.ndarray) -> np.ndarray:
         return frame
@@ -243,7 +232,6 @@ class BaseDetector(BaseComponent):
 
 
 class BaseTracker(BaseComponent):
-
     def __init__(self, max_age: int = 30, min_hits: int = 3, name: str | None = None) -> None:
         super().__init__(name=name)
         self._max_age = max_age
@@ -269,12 +257,10 @@ class BaseTracker(BaseComponent):
         return self._total_tracks
 
     @abstractmethod
-    def update(self, detections: DetectionResult, frame: np.ndarray | None = None) -> list[Any]:
-        ...
+    def update(self, detections: DetectionResult, frame: np.ndarray | None = None) -> list[Any]: ...
 
     @abstractmethod
-    def reset(self) -> None:
-        ...
+    def reset(self) -> None: ...
 
     def get_statistics(self) -> dict[str, Any]:
         return {
@@ -287,7 +273,6 @@ class BaseTracker(BaseComponent):
 
 
 class BaseOptimizer(BaseComponent):
-
     def __init__(self, model_path: str, output_dir: str, name: str | None = None) -> None:
         super().__init__(name=name)
         self._model_path = model_path
@@ -302,9 +287,7 @@ class BaseOptimizer(BaseComponent):
         return self._output_dir
 
     @abstractmethod
-    def optimize(self) -> str:
-        ...
+    def optimize(self) -> str: ...
 
     @abstractmethod
-    def validate(self, original_path: str, optimized_path: str) -> dict[str, Any]:
-        ...
+    def validate(self, original_path: str, optimized_path: str) -> dict[str, Any]: ...

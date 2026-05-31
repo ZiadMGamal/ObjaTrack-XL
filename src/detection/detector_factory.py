@@ -2,20 +2,17 @@ from __future__ import annotations
 
 from typing import Any
 
-from src.core.base import ComponentState
-from src.core.exceptions import DetectionError
-from src.core.registry import detector_registry
-from src.detection.base_detector import BaseObjectDetector
-from src.detection.yolo_detector import YOLODetector
-from src.detection.onnx_detector import ONNXDetector
 from src.config.settings import ModelSettings
+from src.core.exceptions import DetectionError
+from src.detection.base_detector import BaseObjectDetector
+from src.detection.onnx_detector import ONNXDetector
+from src.detection.yolo_detector import YOLODetector
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
 class DetectorFactory:
-
     _detector_map: dict[str, type[BaseObjectDetector]] = {
         "yolo": YOLODetector,
         "pytorch": YOLODetector,
@@ -38,9 +35,7 @@ class DetectorFactory:
 
         if detector_type not in cls._detector_map:
             available = list(cls._detector_map.keys())
-            raise DetectionError(
-                f"Unknown detector type: {detector_type}. Available: {available}"
-            )
+            raise DetectionError(f"Unknown detector type: {detector_type}. Available: {available}")
 
         detector_cls = cls._detector_map[detector_type]
 

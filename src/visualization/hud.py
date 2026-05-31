@@ -12,7 +12,6 @@ logger = get_logger(__name__)
 
 
 class HeadsUpDisplay:
-
     def __init__(
         self,
         position: str = "top-left",
@@ -106,25 +105,48 @@ class HeadsUpDisplay:
         cv2.addWeighted(overlay, self._bg_alpha, frame, 1 - self._bg_alpha, 0, frame)
 
         cv2.rectangle(frame, (x, y), (x + panel_w, y + panel_h), self._accent_color, 1)
-        cv2.line(frame, (x, y + self._line_spacing + 5), (x + panel_w, y + self._line_spacing + 5), self._accent_color, 1)
+        cv2.line(
+            frame, (x, y + self._line_spacing + 5), (x + panel_w, y + self._line_spacing + 5), self._accent_color, 1
+        )
 
         for i, (label, value) in enumerate(lines):
             text_y = y + self._padding + (i + 1) * self._line_spacing - 4
 
             if i == 0:
-                cv2.putText(frame, label, (x + self._padding, text_y),
-                            self._font, self._font_scale + 0.1, self._accent_color,
-                            self._font_thickness + 1, cv2.LINE_AA)
+                cv2.putText(
+                    frame,
+                    label,
+                    (x + self._padding, text_y),
+                    self._font,
+                    self._font_scale + 0.1,
+                    self._accent_color,
+                    self._font_thickness + 1,
+                    cv2.LINE_AA,
+                )
             else:
-                cv2.putText(frame, f"{label}:", (x + self._padding, text_y),
-                            self._font, self._font_scale, self._text_color,
-                            self._font_thickness, cv2.LINE_AA)
+                cv2.putText(
+                    frame,
+                    f"{label}:",
+                    (x + self._padding, text_y),
+                    self._font,
+                    self._font_scale,
+                    self._text_color,
+                    self._font_thickness,
+                    cv2.LINE_AA,
+                )
 
                 (lw, _), _ = cv2.getTextSize(f"{label}: ", self._font, self._font_scale, self._font_thickness)
                 value_color = self._accent_color if label in ("FPS", "Latency") else (180, 255, 180)
-                cv2.putText(frame, value, (x + self._padding + lw, text_y),
-                            self._font, self._font_scale, value_color,
-                            self._font_thickness, cv2.LINE_AA)
+                cv2.putText(
+                    frame,
+                    value,
+                    (x + self._padding + lw, text_y),
+                    self._font,
+                    self._font_scale,
+                    value_color,
+                    self._font_thickness,
+                    cv2.LINE_AA,
+                )
 
         return frame
 

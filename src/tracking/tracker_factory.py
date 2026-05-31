@@ -2,20 +2,19 @@ from __future__ import annotations
 
 from typing import Any
 
-from src.core.exceptions import TrackingError
 from src.config.settings import TrackerSettings
+from src.core.exceptions import TrackingError
 from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.sort_tracker import SORTTracker
-from src.tracking.byte_tracker import ByteTrackTracker
 from src.tracking.bot_sort_tracker import BoTSORTTracker
+from src.tracking.byte_tracker import ByteTrackTracker
 from src.tracking.deep_sort_tracker import DeepSORTTracker
+from src.tracking.sort_tracker import SORTTracker
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
 
 class TrackerFactory:
-
     _tracker_map: dict[str, type[BaseObjectTracker]] = {
         "sort": SORTTracker,
         "bytetrack": ByteTrackTracker,

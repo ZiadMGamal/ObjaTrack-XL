@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 import time
-from pathlib import Path
 from typing import Any
 
 import numpy as np
 from ultralytics import YOLO
 
 from src.core.base import ComponentState, DetectionResult
-from src.core.exceptions import DetectionError, ModelLoadError, ModelNotFoundError
+from src.core.exceptions import DetectionError, ModelLoadError
 from src.core.registry import detector_registry
 from src.detection.base_detector import BaseObjectDetector
 from src.utils.logger import get_logger
@@ -18,7 +17,6 @@ logger = get_logger(__name__)
 
 @detector_registry.register("yolo")
 class YOLODetector(BaseObjectDetector):
-
     def __init__(
         self,
         model_path: str = "yolov8n.pt",

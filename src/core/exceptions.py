@@ -2,7 +2,6 @@ from __future__ import annotations
 
 
 class ObjaTrackError(Exception):
-
     def __init__(self, message: str, error_code: str | None = None, details: dict | None = None) -> None:
         self.message = message
         self.error_code = error_code
@@ -26,7 +25,6 @@ class ObjaTrackError(Exception):
 
 
 class CaptureError(ObjaTrackError):
-
     def __init__(self, message: str, source: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if source:
@@ -35,7 +33,6 @@ class CaptureError(ObjaTrackError):
 
 
 class CaptureTimeoutError(CaptureError):
-
     def __init__(self, source: str, timeout: float) -> None:
         super().__init__(
             f"Capture timeout after {timeout}s",
@@ -45,7 +42,6 @@ class CaptureTimeoutError(CaptureError):
 
 
 class CaptureConnectionError(CaptureError):
-
     def __init__(self, source: str, reason: str | None = None) -> None:
         msg = f"Failed to connect to source: {source}"
         if reason:
@@ -54,7 +50,6 @@ class CaptureConnectionError(CaptureError):
 
 
 class DetectionError(ObjaTrackError):
-
     def __init__(self, message: str, model_name: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if model_name:
@@ -63,7 +58,6 @@ class DetectionError(ObjaTrackError):
 
 
 class DetectionPreprocessError(DetectionError):
-
     def __init__(self, message: str, input_shape: tuple | None = None) -> None:
         details = {}
         if input_shape:
@@ -72,7 +66,6 @@ class DetectionPreprocessError(DetectionError):
 
 
 class DetectionPostprocessError(DetectionError):
-
     def __init__(self, message: str, output_shape: tuple | None = None) -> None:
         details = {}
         if output_shape:
@@ -81,7 +74,6 @@ class DetectionPostprocessError(DetectionError):
 
 
 class TrackingError(ObjaTrackError):
-
     def __init__(self, message: str, tracker_type: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if tracker_type:
@@ -90,7 +82,6 @@ class TrackingError(ObjaTrackError):
 
 
 class TrackingAssociationError(TrackingError):
-
     def __init__(self, message: str, num_detections: int = 0, num_tracks: int = 0) -> None:
         super().__init__(
             message,
@@ -99,7 +90,6 @@ class TrackingAssociationError(TrackingError):
 
 
 class OptimizationError(ObjaTrackError):
-
     def __init__(self, message: str, format_type: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if format_type:
@@ -108,7 +98,6 @@ class OptimizationError(ObjaTrackError):
 
 
 class QuantizationError(OptimizationError):
-
     def __init__(self, message: str, precision: str | None = None) -> None:
         details = {}
         if precision:
@@ -117,7 +106,6 @@ class QuantizationError(OptimizationError):
 
 
 class ExportError(OptimizationError):
-
     def __init__(self, message: str, source_format: str = "", target_format: str = "") -> None:
         super().__init__(
             message,
@@ -126,7 +114,6 @@ class ExportError(OptimizationError):
 
 
 class ConfigurationError(ObjaTrackError):
-
     def __init__(self, message: str, config_key: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if config_key:
@@ -135,7 +122,6 @@ class ConfigurationError(ObjaTrackError):
 
 
 class ConfigValidationError(ConfigurationError):
-
     def __init__(self, field: str, value: object, reason: str) -> None:
         super().__init__(
             f"Validation failed for '{field}': {reason}",
@@ -145,7 +131,6 @@ class ConfigValidationError(ConfigurationError):
 
 
 class ModelError(ObjaTrackError):
-
     def __init__(self, message: str, model_path: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if model_path:
@@ -154,13 +139,11 @@ class ModelError(ObjaTrackError):
 
 
 class ModelNotFoundError(ModelError):
-
     def __init__(self, model_path: str) -> None:
         super().__init__(f"Model not found: {model_path}", model_path=model_path)
 
 
 class ModelLoadError(ModelError):
-
     def __init__(self, model_path: str, reason: str | None = None) -> None:
         msg = f"Failed to load model: {model_path}"
         if reason:
@@ -169,7 +152,6 @@ class ModelLoadError(ModelError):
 
 
 class PipelineError(ObjaTrackError):
-
     def __init__(self, message: str, stage: str | None = None, **kwargs) -> None:
         details = kwargs.pop("details", {})
         if stage:
@@ -178,7 +160,6 @@ class PipelineError(ObjaTrackError):
 
 
 class PipelineStageError(PipelineError):
-
     def __init__(self, stage: str, original_error: Exception) -> None:
         super().__init__(
             f"Pipeline failed at stage '{stage}': {original_error}",
@@ -188,7 +169,6 @@ class PipelineStageError(PipelineError):
 
 
 class APIError(ObjaTrackError):
-
     def __init__(self, message: str, status_code: int = 500, **kwargs) -> None:
         details = kwargs.pop("details", {})
         details["status_code"] = status_code
@@ -197,7 +177,6 @@ class APIError(ObjaTrackError):
 
 
 class ResourceExhaustedError(ObjaTrackError):
-
     def __init__(self, resource: str, limit: str | None = None) -> None:
         details = {"resource": resource}
         if limit:
@@ -210,7 +189,6 @@ class ResourceExhaustedError(ObjaTrackError):
 
 
 class DeviceError(ObjaTrackError):
-
     def __init__(self, message: str, device: str | None = None) -> None:
         details = {}
         if device:

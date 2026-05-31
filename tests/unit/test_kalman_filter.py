@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from src.tracking.kalman_filter import KalmanFilterXYAH, KalmanFilterXYWH
 
 
 class TestKalmanFilterXYAH:
-
     def test_initiate(self) -> None:
         kf = KalmanFilterXYAH()
         measurement = np.array([100.0, 100.0, 1.5, 50.0])
@@ -41,10 +39,12 @@ class TestKalmanFilterXYAH:
         measurement = np.array([100.0, 100.0, 1.5, 50.0])
         mean, cov = kf.initiate(measurement)
 
-        measurements = np.array([
-            [100.0, 100.0, 1.5, 50.0],
-            [200.0, 200.0, 2.0, 60.0],
-        ])
+        measurements = np.array(
+            [
+                [100.0, 100.0, 1.5, 50.0],
+                [200.0, 200.0, 2.0, 60.0],
+            ]
+        )
         distances = kf.gating_distance(mean, cov, measurements)
         assert distances.shape == (2,)
         assert distances[0] < distances[1]
@@ -63,7 +63,6 @@ class TestKalmanFilterXYAH:
 
 
 class TestKalmanFilterXYWH:
-
     def test_initiate(self) -> None:
         kf = KalmanFilterXYWH()
         measurement = np.array([100.0, 100.0, 80.0, 120.0])

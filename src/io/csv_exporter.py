@@ -10,18 +10,34 @@ logger = get_logger(__name__)
 
 
 class CSVExporter:
-
     DETECTION_HEADERS = [
-        "frame_id", "timestamp", "detection_id",
-        "x1", "y1", "x2", "y2",
-        "confidence", "class_id", "class_name",
+        "frame_id",
+        "timestamp",
+        "detection_id",
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "confidence",
+        "class_id",
+        "class_name",
     ]
 
     TRACK_HEADERS = [
-        "frame_id", "timestamp", "track_id",
-        "x1", "y1", "x2", "y2",
-        "confidence", "class_id", "class_name",
-        "age", "hits", "speed", "direction",
+        "frame_id",
+        "timestamp",
+        "track_id",
+        "x1",
+        "y1",
+        "x2",
+        "y2",
+        "confidence",
+        "class_id",
+        "class_name",
+        "age",
+        "hits",
+        "speed",
+        "direction",
     ]
 
     def __init__(
@@ -46,7 +62,9 @@ class CSVExporter:
     ) -> None:
         for i, det in enumerate(detections):
             row = [
-                frame_id, round(timestamp, 6), i,
+                frame_id,
+                round(timestamp, 6),
+                i,
                 det.get("box", [0, 0, 0, 0])[0],
                 det.get("box", [0, 0, 0, 0])[1],
                 det.get("box", [0, 0, 0, 0])[2],
@@ -66,9 +84,13 @@ class CSVExporter:
         for track in tracks:
             box = track.get("box", [0, 0, 0, 0])
             row = [
-                frame_id, round(timestamp, 6), track.get("track_id", 0),
-                round(box[0], 1), round(box[1], 1),
-                round(box[2], 1), round(box[3], 1),
+                frame_id,
+                round(timestamp, 6),
+                track.get("track_id", 0),
+                round(box[0], 1),
+                round(box[1], 1),
+                round(box[2], 1),
+                round(box[3], 1),
                 round(track.get("score", 0), 4),
                 track.get("class_id", 0),
                 track.get("class_name", ""),

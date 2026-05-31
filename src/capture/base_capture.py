@@ -6,7 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from src.core.base import BaseCapture, ComponentState
+from src.core.base import BaseCapture
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -19,7 +19,6 @@ class CaptureBackend(Enum):
 
 
 class BaseCaptureSource(BaseCapture):
-
     def __init__(
         self,
         source: str | int,
@@ -64,28 +63,22 @@ class BaseCaptureSource(BaseCapture):
         return self._dropped_frames / self._total_frames_read
 
     @abstractmethod
-    def read(self) -> tuple[bool, np.ndarray | None]:
-        ...
+    def read(self) -> tuple[bool, np.ndarray | None]: ...
 
     @abstractmethod
-    def is_opened(self) -> bool:
-        ...
+    def is_opened(self) -> bool: ...
 
     @abstractmethod
-    def release(self) -> None:
-        ...
+    def release(self) -> None: ...
 
     @abstractmethod
-    def get_total_frames(self) -> int:
-        ...
+    def get_total_frames(self) -> int: ...
 
     @abstractmethod
-    def get_current_position(self) -> int:
-        ...
+    def get_current_position(self) -> int: ...
 
     @abstractmethod
-    def seek(self, frame_number: int) -> bool:
-        ...
+    def seek(self, frame_number: int) -> bool: ...
 
     def get_capture_info(self) -> dict[str, Any]:
         return {

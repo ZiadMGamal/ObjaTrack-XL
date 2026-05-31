@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import threading
-from typing import Any, TypeVar, Generic
+from typing import Any, Generic, TypeVar
 
 T = TypeVar("T")
 
 
 class ComponentRegistry(Generic[T]):
-
     _instances: dict[str, dict[str, type[T]]] = {}
     _lock = threading.Lock()
 
@@ -25,21 +24,17 @@ class ComponentRegistry(Generic[T]):
         def decorator(cls: type[T]) -> type[T]:
             with self._lock:
                 if name in self._instances[self._registry_name]:
-                    raise ValueError(
-                        f"Component '{name}' already registered in '{self._registry_name}'"
-                    )
+                    raise ValueError(f"Component '{name}' already registered in '{self._registry_name}'")
                 self._instances[self._registry_name][name] = cls
             return cls
+
         return decorator
 
     def get(self, name: str) -> type[T]:
         with self._lock:
             if name not in self._instances.get(self._registry_name, {}):
                 available = list(self._instances.get(self._registry_name, {}).keys())
-                raise KeyError(
-                    f"Component '{name}' not found in '{self._registry_name}'. "
-                    f"Available: {available}"
-                )
+                raise KeyError(f"Component '{name}' not found in '{self._registry_name}'. Available: {available}")
             return self._instances[self._registry_name][name]
 
     def create(self, name: str, *args: Any, **kwargs: Any) -> T:

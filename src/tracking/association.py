@@ -3,8 +3,8 @@ from __future__ import annotations
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 
-from src.utils.math_utils import MathUtils
 from src.utils.logger import get_logger
+from src.utils.math_utils import MathUtils
 
 logger = get_logger(__name__)
 
@@ -38,7 +38,7 @@ def euclidean_distance(tracks_centers: np.ndarray, detection_centers: np.ndarray
         return np.empty((len(tracks_centers), len(detection_centers)))
 
     diff = tracks_centers[:, np.newaxis, :] - detection_centers[np.newaxis, :, :]
-    return np.sqrt(np.sum(diff ** 2, axis=2))
+    return np.sqrt(np.sum(diff**2, axis=2))
 
 
 def mahalanobis_distance(
@@ -63,7 +63,9 @@ def mahalanobis_distance(
     return cost_matrix
 
 
-def linear_assignment(cost_matrix: np.ndarray, threshold: float = 0.7) -> tuple[list[tuple[int, int]], list[int], list[int]]:
+def linear_assignment(
+    cost_matrix: np.ndarray, threshold: float = 0.7
+) -> tuple[list[tuple[int, int]], list[int], list[int]]:
     if cost_matrix.size == 0:
         return [], list(range(cost_matrix.shape[0])), list(range(cost_matrix.shape[1]))
 
@@ -85,7 +87,9 @@ def linear_assignment(cost_matrix: np.ndarray, threshold: float = 0.7) -> tuple[
     return matches, unmatched_tracks, unmatched_detections
 
 
-def greedy_assignment(cost_matrix: np.ndarray, threshold: float = 0.7) -> tuple[list[tuple[int, int]], list[int], list[int]]:
+def greedy_assignment(
+    cost_matrix: np.ndarray, threshold: float = 0.7
+) -> tuple[list[tuple[int, int]], list[int], list[int]]:
     if cost_matrix.size == 0:
         return [], list(range(cost_matrix.shape[0])), list(range(cost_matrix.shape[1]))
 

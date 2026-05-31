@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import numpy as np
-import pytest
 
 from src.detection.preprocessing import DetectionPreprocessor
 
 
 class TestDetectionPreprocessor:
-
     def test_initialization(self) -> None:
         prep = DetectionPreprocessor(input_size=(640, 640))
         assert prep.input_size == (640, 640)

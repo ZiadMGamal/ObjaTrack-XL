@@ -12,7 +12,6 @@ logger = get_logger(__name__)
 
 
 class BaseObjectDetector(BaseDetector):
-
     def __init__(
         self,
         model_path: str,
@@ -60,12 +59,10 @@ class BaseObjectDetector(BaseDetector):
         return self._total_detections / self._inference_count
 
     @abstractmethod
-    def detect(self, frame: np.ndarray) -> DetectionResult:
-        ...
+    def detect(self, frame: np.ndarray) -> DetectionResult: ...
 
     @abstractmethod
-    def warmup(self, iterations: int = 10) -> None:
-        ...
+    def warmup(self, iterations: int = 10) -> None: ...
 
     def filter_classes(self, result: DetectionResult) -> DetectionResult:
         if self._target_classes is None:

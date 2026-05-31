@@ -5,7 +5,6 @@ import numpy as np
 
 
 class ImageProcessor:
-
     @staticmethod
     def letterbox(
         image: np.ndarray,
@@ -46,14 +45,21 @@ class ImageProcessor:
         right = int(round(dw + 0.1))
 
         image = cv2.copyMakeBorder(
-            image, top, bottom, left, right,
-            cv2.BORDER_CONSTANT, value=color,
+            image,
+            top,
+            bottom,
+            left,
+            right,
+            cv2.BORDER_CONSTANT,
+            value=color,
         )
 
         return image, r, (dw, dh)
 
     @staticmethod
-    def normalize(image: np.ndarray, mean: tuple[float, ...] = (0.0, 0.0, 0.0), std: tuple[float, ...] = (1.0, 1.0, 1.0)) -> np.ndarray:
+    def normalize(
+        image: np.ndarray, mean: tuple[float, ...] = (0.0, 0.0, 0.0), std: tuple[float, ...] = (1.0, 1.0, 1.0)
+    ) -> np.ndarray:
         img = image.astype(np.float32) / 255.0
         if any(m != 0.0 for m in mean) or any(s != 1.0 for s in std):
             mean_arr = np.array(mean, dtype=np.float32).reshape(1, 1, 3)

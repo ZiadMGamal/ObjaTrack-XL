@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
-
 import numpy as np
 
 from src.core.base import ComponentState, DetectionResult
 from src.core.registry import tracker_registry
-from src.tracking.base_tracker import BaseObjectTracker
-from src.tracking.track import Track, TrackState
-from src.tracking.kalman_filter import KalmanFilterXYAH
 from src.tracking.association import iou_distance, linear_assignment
+from src.tracking.base_tracker import BaseObjectTracker
+from src.tracking.kalman_filter import KalmanFilterXYAH
+from src.tracking.track import Track, TrackState
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -17,7 +15,6 @@ logger = get_logger(__name__)
 
 @tracker_registry.register("bytetrack")
 class ByteTrackTracker(BaseObjectTracker):
-
     def __init__(
         self,
         max_age: int = 30,
@@ -112,27 +109,33 @@ class ByteTrackTracker(BaseObjectTracker):
 
         for t_idx, d_idx in matches_1:
             track = confirmed[t_idx]
-            self._apply_update(track, high_boxes[d_idx], float(high_scores[d_idx]),
-                             int(high_class_ids[d_idx]),
-                             high_class_names[d_idx] if high_class_names else "")
+            self._apply_update(
+                track,
+                high_boxes[d_idx],
+                float(high_scores[d_idx]),
+                int(high_class_ids[d_idx]),
+                high_class_names[d_idx] if high_class_names else "",
+            )
 
         remaining_tracks = [confirmed[i] for i in unmatched_tracks_1]
         remaining_boxes = np.array([t.box for t in remaining_tracks]) if remaining_tracks else np.empty((0, 4))
 
         if len(remaining_boxes) > 0 and len(low_boxes) > 0:
             cost_2 = iou_distance(remaining_boxes, low_boxes)
-            matches_2, unmatched_tracks_2, _ = linear_assignment(
-                cost_2, threshold=1.0 - 0.5
-            )
+            matches_2, unmatched_tracks_2, _ = linear_assignment(cost_2, threshold=1.0 - 0.5)
         else:
             matches_2 = []
             unmatched_tracks_2 = list(range(len(remaining_tracks)))
 
         for t_idx, d_idx in matches_2:
             track = remaining_tracks[t_idx]
-            self._apply_update(track, low_boxes[d_idx], float(low_scores[d_idx]),
-                             int(low_class_ids[d_idx]),
-                             low_class_names[d_idx] if low_class_names else "")
+            self._apply_update(
+                track,
+                low_boxes[d_idx],
+                float(low_scores[d_idx]),
+                int(low_class_ids[d_idx]),
+                low_class_names[d_idx] if low_class_names else "",
+            )
 
         for t_idx in unmatched_tracks_2:
             track = remaining_tracks[t_idx]
@@ -145,9 +148,7 @@ class ByteTrackTracker(BaseObjectTracker):
 
         if len(unconfirmed_boxes) > 0 and len(remaining_high_boxes) > 0:
             cost_3 = iou_distance(unconfirmed_boxes, remaining_high_boxes)
-            matches_3, unmatched_unconfirmed, unmatched_new = linear_assignment(
-                cost_3, threshold=1.0 - 0.7
-            )
+            matches_3, unmatched_unconfirmed, unmatched_new = linear_assignment(cost_3, threshold=1.0 - 0.7)
         else:
             matches_3 = []
             unmatched_unconfirmed = list(range(len(unconfirmed)))
@@ -156,9 +157,13 @@ class ByteTrackTracker(BaseObjectTracker):
         for t_idx, d_idx in matches_3:
             track = unconfirmed[t_idx]
             actual_d_idx = unmatched_dets_1[d_idx]
-            self._apply_update(track, high_boxes[actual_d_idx], float(high_scores[actual_d_idx]),
-                             int(high_class_ids[actual_d_idx]),
-                             high_class_names[actual_d_idx] if high_class_names else "")
+            self._apply_update(
+                track,
+                high_boxes[actual_d_idx],
+                float(high_scores[actual_d_idx]),
+                int(high_class_ids[actual_d_idx]),
+                high_class_names[actual_d_idx] if high_class_names else "",
+            )
 
         for t_idx in unmatched_unconfirmed:
             track = unconfirmed[t_idx]
@@ -169,7 +174,8 @@ class ByteTrackTracker(BaseObjectTracker):
             score = float(high_scores[actual_d_idx])
             if score >= self._new_track_thresh:
                 track = self._create_track(
-                    high_boxes[actual_d_idx], score,
+                    high_boxes[actual_d_idx],
+                    score,
                     int(high_class_ids[actual_d_idx]),
                     high_class_names[actual_d_idx] if high_class_names else "",
                 )

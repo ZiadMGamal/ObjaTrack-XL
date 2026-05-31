@@ -10,7 +10,6 @@ logger = get_logger(__name__)
 
 
 class BaseModelOptimizer(BaseOptimizer):
-
     def __init__(
         self,
         model_path: str,
@@ -37,15 +36,14 @@ class BaseModelOptimizer(BaseOptimizer):
         return self._optimization_results
 
     @abstractmethod
-    def optimize(self) -> str:
-        ...
+    def optimize(self) -> str: ...
 
     @abstractmethod
-    def validate(self, original_path: str, optimized_path: str) -> dict[str, Any]:
-        ...
+    def validate(self, original_path: str, optimized_path: str) -> dict[str, Any]: ...
 
     def get_model_size_mb(self, path: str) -> float:
         from pathlib import Path
+
         p = Path(path)
         if p.exists():
             return round(p.stat().st_size / (1024 * 1024), 2)

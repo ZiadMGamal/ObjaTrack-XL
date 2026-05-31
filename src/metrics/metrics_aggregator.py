@@ -13,7 +13,6 @@ logger = get_logger(__name__)
 
 
 class MetricsAggregator:
-
     def __init__(self, enable_gpu: bool = False, system_sampling_interval: float = 1.0) -> None:
         self._fps_counter = FPSCounter()
         self._latency_tracker = LatencyTracker()

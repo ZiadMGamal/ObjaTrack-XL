@@ -6,9 +6,9 @@ import time
 import cv2
 import numpy as np
 
-from src.capture.base_capture import BaseCaptureSource, CaptureBackend
+from src.capture.base_capture import BaseCaptureSource
 from src.core.base import ComponentState
-from src.core.exceptions import CaptureConnectionError, CaptureTimeoutError
+from src.core.exceptions import CaptureConnectionError
 from src.core.registry import capture_registry
 from src.utils.logger import get_logger
 
@@ -17,7 +17,6 @@ logger = get_logger(__name__)
 
 @capture_registry.register("rtsp")
 class RTSPCapture(BaseCaptureSource):
-
     def __init__(
         self,
         rtsp_url: str,
@@ -72,7 +71,7 @@ class RTSPCapture(BaseCaptureSource):
         for attempt in range(self._reconnect_attempts):
             try:
                 if self._transport == "tcp":
-                    env_options = f"rtsp_transport;tcp"
+                    env_options = "rtsp_transport;tcp"
                     self._cap = cv2.VideoCapture(self._rtsp_url, cv2.CAP_FFMPEG)
                     self._cap.set(cv2.CAP_PROP_BUFFERSIZE, self._buffer_size)
                 else:

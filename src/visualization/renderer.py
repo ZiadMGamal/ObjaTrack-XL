@@ -1,20 +1,17 @@
 from __future__ import annotations
 
-from typing import Any
-
 import cv2
 import numpy as np
 
 from src.core.base import DetectionResult
 from src.tracking.track import Track
-from src.visualization.color_palette import ColorPalette
 from src.utils.logger import get_logger
+from src.visualization.color_palette import ColorPalette
 
 logger = get_logger(__name__)
 
 
 class OverlayRenderer:
-
     def __init__(
         self,
         show_boxes: bool = True,
@@ -108,9 +105,7 @@ class OverlayRenderer:
         position: tuple[int, int],
         color: tuple[int, int, int],
     ) -> np.ndarray:
-        (text_w, text_h), baseline = cv2.getTextSize(
-            label, self._font, self._font_scale, self._font_thickness
-        )
+        (text_w, text_h), baseline = cv2.getTextSize(label, self._font, self._font_scale, self._font_thickness)
 
         x, y = position
         pad = self._label_padding
@@ -126,9 +121,13 @@ class OverlayRenderer:
 
         text_color = self._palette.get_contrast_color(color)
         cv2.putText(
-            frame, label,
+            frame,
+            label,
             (label_x1 + pad, label_y2 - pad),
-            self._font, self._font_scale, text_color, self._font_thickness,
+            self._font,
+            self._font_scale,
+            text_color,
+            self._font_thickness,
             cv2.LINE_AA,
         )
 
@@ -140,7 +139,7 @@ class OverlayRenderer:
         track: Track,
         color: tuple[int, int, int],
     ) -> np.ndarray:
-        trajectory = track.trajectory[-self._trajectory_length:]
+        trajectory = track.trajectory[-self._trajectory_length :]
         if len(trajectory) < 2:
             return frame
 
@@ -173,8 +172,7 @@ class OverlayRenderer:
         mid_y = (start[1] + end[1]) // 2
 
         label = f"IN:{count_in} OUT:{count_out}"
-        cv2.putText(frame, label, (mid_x - 40, mid_y - 10),
-                    self._font, 0.7, color, 2, cv2.LINE_AA)
+        cv2.putText(frame, label, (mid_x - 40, mid_y - 10), self._font, 0.7, color, 2, cv2.LINE_AA)
 
         return frame
 
@@ -195,7 +193,6 @@ class OverlayRenderer:
         if label:
             cx = int(np.mean([p[0] for p in points]))
             cy = int(np.mean([p[1] for p in points]))
-            cv2.putText(frame, label, (cx - 20, cy),
-                        self._font, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
+            cv2.putText(frame, label, (cx - 20, cy), self._font, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
 
         return frame

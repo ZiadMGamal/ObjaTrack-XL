@@ -15,7 +15,6 @@ logger = get_logger(__name__)
 
 
 class ModelQuantizer(BaseModelOptimizer):
-
     def __init__(
         self,
         model_path: str,
@@ -61,7 +60,7 @@ class ModelQuantizer(BaseModelOptimizer):
         )
 
         try:
-            from onnxruntime.quantization import quantize_dynamic, QuantType
+            from onnxruntime.quantization import QuantType, quantize_dynamic
 
             input_path = self._model_path
             stem = Path(input_path).stem
@@ -111,18 +110,17 @@ class ModelQuantizer(BaseModelOptimizer):
 
         try:
             from onnxruntime.quantization import (
-                quantize_static,
                 CalibrationDataReader,
-                QuantType,
                 QuantFormat,
+                QuantType,
+                quantize_static,
             )
 
             class RandomCalibrationReader(CalibrationDataReader):
                 def __init__(self, input_size: tuple[int, int], num_samples: int):
-                    self._data = iter([
-                        {"images": np.random.randn(1, 3, *input_size).astype(np.float32)}
-                        for _ in range(num_samples)
-                    ])
+                    self._data = iter(
+                        [{"images": np.random.randn(1, 3, *input_size).astype(np.float32)} for _ in range(num_samples)]
+                    )
 
                 def get_next(self) -> dict | None:
                     try:
@@ -134,9 +132,7 @@ class ModelQuantizer(BaseModelOptimizer):
             stem = Path(input_path).stem
             output_path = str(Path(self._output_dir) / f"{stem}_{self._precision}_static.onnx")
 
-            calibration_reader = RandomCalibrationReader(
-                self._input_size, self._calibration_samples
-            )
+            calibration_reader = RandomCalibrationReader(self._input_size, self._calibration_samples)
 
             quantize_static(
                 model_input=input_path,
@@ -196,8 +192,8 @@ class ModelQuantizer(BaseModelOptimizer):
                 "mean_abs_diff": float(np.mean(abs_diff)),
                 "median_abs_diff": float(np.median(abs_diff)),
                 "cosine_similarity": float(
-                    np.dot(orig_output.flatten(), quant_output.flatten()) /
-                    (np.linalg.norm(orig_output.flatten()) * np.linalg.norm(quant_output.flatten()) + 1e-8)
+                    np.dot(orig_output.flatten(), quant_output.flatten())
+                    / (np.linalg.norm(orig_output.flatten()) * np.linalg.norm(quant_output.flatten()) + 1e-8)
                 ),
             }
         except Exception as e:

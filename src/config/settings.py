@@ -201,7 +201,7 @@ class Settings(BaseSettings):
         if not config_path.exists():
             raise FileNotFoundError(f"Config file not found: {path}")
 
-        with open(config_path, "r") as f:
+        with open(config_path) as f:
             data = yaml.safe_load(f) or {}
 
         return cls._build_from_dict(data)

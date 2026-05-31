@@ -1,19 +1,16 @@
 from __future__ import annotations
 
-from typing import Any
 from collections import defaultdict
-
-import numpy as np
+from typing import Any
 
 from src.tracking.track import Track
-from src.utils.math_utils import MathUtils
 from src.utils.logger import get_logger
+from src.utils.math_utils import MathUtils
 
 logger = get_logger(__name__)
 
 
 class Zone:
-
     def __init__(self, zone_id: str, points: list[tuple[int, int]], name: str = "") -> None:
         self.zone_id = zone_id
         self.points = points
@@ -40,7 +37,6 @@ class Zone:
 
 
 class ZoneAnalytics:
-
     def __init__(self, zones: list[dict[str, Any]] | None = None) -> None:
         self._zones: dict[str, Zone] = {}
         if zones:
@@ -77,23 +73,27 @@ class ZoneAnalytics:
                     if track.track_id not in zone.track_ids_inside:
                         zone.total_entries += 1
                         zone.class_counts[track.class_name] += 1
-                        events.append({
-                            "type": "zone_enter",
-                            "zone_id": zone.zone_id,
-                            "zone_name": zone.name,
-                            "track_id": track.track_id,
-                            "class_name": track.class_name,
-                        })
+                        events.append(
+                            {
+                                "type": "zone_enter",
+                                "zone_id": zone.zone_id,
+                                "zone_name": zone.name,
+                                "track_id": track.track_id,
+                                "class_name": track.class_name,
+                            }
+                        )
 
             exited = zone.track_ids_inside - current_inside
             for tid in exited:
                 zone.total_exits += 1
-                events.append({
-                    "type": "zone_exit",
-                    "zone_id": zone.zone_id,
-                    "zone_name": zone.name,
-                    "track_id": tid,
-                })
+                events.append(
+                    {
+                        "type": "zone_exit",
+                        "zone_id": zone.zone_id,
+                        "zone_name": zone.name,
+                        "track_id": tid,
+                    }
+                )
 
             zone.track_ids_inside = current_inside
             zone.current_count = len(current_inside)
